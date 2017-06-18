@@ -11,9 +11,19 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
-  end
+    # This instance variable is share for MoviesHelper class. 
+    @ordered_by = params[:order_by] if params.has_key? 'order_by'
 
+    # If we had set an ':order_by' value in hash params[] order de list
+  	if params[:order_by] ==  'title'
+      @movies = Movie.order('title asc')	
+    elsif params[:order_by] = 'release_date'
+      @movies = Movie.order('release_date asc')      	
+  	else
+  		@movies = Movie.all
+  	end
+  end
+    
   def new
     # default: render 'new' template
   end

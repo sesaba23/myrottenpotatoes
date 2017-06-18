@@ -1,3 +1,7 @@
+/* Add yellow background in the header that has been selected for sorting column*/
+table#movies th.hilite {
+  background-color: yellow;
+}
 html, body {
   margin: 0;
   padding: 0;
