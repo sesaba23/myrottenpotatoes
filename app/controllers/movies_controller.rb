@@ -14,6 +14,9 @@ class MoviesController < ApplicationController
     # This instance variable is share for MoviesHelper class. 
     @ordered_by = params[:order_by] if params.has_key? 'order_by'
 
+    # Instance variable that holds all posible values (distinct) in the field rating
+    @all_ratings = Movie.get_list_of_ratings
+
     # If we had set an ':order_by' value in hash params[] order de list
   	if params[:order_by] ==  'title'
       @movies = Movie.order('title asc')	
