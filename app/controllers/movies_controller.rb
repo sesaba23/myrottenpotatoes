@@ -23,9 +23,11 @@ class MoviesController < ApplicationController
 
     # save  the state of each rating checkbox and sorting only 
     # if user has selected some checkbox or has aplied some sorting
-    session[:checked_ratings] = @checked_ratings if @checked_ratings
-    session[:ordered_by] = @ordered_by if @ordered_by
-
+    if @ordered_by || @checked_ratings
+      session[:checked_ratings] = @checked_ratings if @checked_ratings
+      session[:ordered_by] = @ordered_by if @ordered_by
+    end
+    
     # Load save checkboxes rating and sorting only if the user doesn't change the filter
     if !@checked_ratings && session[:checked_ratings] && !@order_by
       @checked_ratings = session[:checked_ratings] unless @checked_ratings
@@ -45,9 +47,9 @@ class MoviesController < ApplicationController
       else
         @movies = Movie.where(rating: @checked_ratings.keys) 
       end
-    elsif @order_by
+    elsif @ordered_by
       # If we had set an ':order_by' value in hash params[] order de list
-      @movies = Movie.order('#{@ordered_by} asc')
+      @movies = Movie.order("#{@ordered_by} asc")
       # If not, show all rows of the DB  
     else
         @movies = Movie.all
