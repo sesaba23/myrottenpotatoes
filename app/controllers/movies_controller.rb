@@ -14,31 +14,28 @@ class MoviesController < ApplicationController
     # This instance variable is share for MoviesHelper class. 
     @ordered_by = params[:order_by] if params.has_key? 'order_by'
 
-    # Instance variable that holds all posible values (distinct) in the field rating
+    # Instance variable that holds all posible values (distinct) in the column rating of the DB
+    # in order to load 'rating filter' in the view
     @all_ratings = Movie.get_list_of_ratings
 
     # Get hash 'rating' from hash 'params' only if the user has selected some checkbox
     @checked_ratings = params[:ratings] if params.has_key? 'ratings'
-       
-    # save  the state of each rating checkbox in order to be able to use in the next HTML request
-    #session[:checked_ratings] = @checked_ratings if @checked_ratings
-    #if !@checked_ratings && session[:checked_ratings] 
-    #  @checked_ratings = session[:checked_ratings] unless @checked_ratings
-    #end
 
-    # If we had set an ':order_by' value in hash params[] order de list
-  	if params[:order_by] ==  'title'
-      @movies = Movie.order('title asc')
-    end	
-    if params[:order_by] = 'release_date'
-      @movies = Movie.order('release_date asc') 
-    end
+    # Apply rating filter if neccessary
     if @checked_ratings
       array = @checked_ratings.keys
       @movies = Movie.where(rating:  array) 
-  	else
-      @movies = Movie.all
-  	end
+    else
+      # If we had set an ':order_by' value in hash params[] order de list
+      if params[:order_by] ==  'title'
+        @movies = Movie.order('title asc')
+      elsif params[:order_by] = 'release_date'
+        @movies = Movie.order('release_date asc') 
+      # If not, show all rows of the DB  
+      else
+        @movies = Movie.all
+      end
+    end     
   end
     
   def new
