@@ -1,6 +1,6 @@
 class Movie < ActiveRecord::Base
 
-	# This method gets a list of distinct type of rating thar are inside the 'rating'
+	# This method gets a list of distinct type of rating that are inside the 'rating'
 	# column of the 'Movies' table
 	def self.get_list_of_ratings
 		ratings = select(:rating).distinct

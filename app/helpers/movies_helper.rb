@@ -15,4 +15,14 @@ module MoviesHelper
 	{:order_by=> column, :asc=>true}
   end
 
+# initialize checkboxes' rating acording to params passed in HTTP GET.
+# If not params, when is the first time the app is executed, for example, checked all boxes
+  def has_been_checked?(rating)
+  	if @checked_ratings
+  		@checked_ratings.include? rating
+  	else
+  		true
+  	end
+  end
+
 end
