@@ -21,21 +21,37 @@ class MoviesController < ApplicationController
     # Get hash 'rating' from hash 'params' only if the user has selected some checkbox
     @checked_ratings = params[:ratings] if params.has_key? 'ratings'
 
+    # save  the state of each rating checkbox and sorting only 
+    # if user has selected some checkbox or has aplied some sorting
+    session[:checked_ratings] = @checked_ratings if @checked_ratings
+    session[:ordered_by] = @ordered_by if @ordered_by
+
+    # Load save checkboxes rating and sorting only if the user doesn't change the filter
+    if !@checked_ratings && session[:checked_ratings] && !@order_by
+      @checked_ratings = session[:checked_ratings] unless @checked_ratings
+      @ordered_by = session[:ordered_by] unless @ordered_by
+
+      # Next step: redirect in order to preserve RESTful adding nececssary parameters to the HTTP request
+      # The page is then loaded twice so we need to make flash survive more than only one single redirect
+      flash.keep
+      redirect_to movies_path({ratings: @checked_ratings, order_by: @ordered_by})
+    end
+
     # Apply rating filter if neccessary
     if @checked_ratings
-      array = @checked_ratings.keys
-      @movies = Movie.where(rating:  array) 
-    else
       # If we had set an ':order_by' value in hash params[] order de list
-      if params[:order_by] ==  'title'
-        @movies = Movie.order('title asc')
-      elsif params[:order_by] = 'release_date'
-        @movies = Movie.order('release_date asc') 
-      # If not, show all rows of the DB  
+      if @ordered_by
+        @movies = Movie.where(rating: @checked_ratings.keys).order("#{@ordered_by} asc")
       else
-        @movies = Movie.all
+        @movies = Movie.where(rating: @checked_ratings.keys) 
       end
-    end     
+    elsif @order_by
+      # If we had set an ':order_by' value in hash params[] order de list
+      @movies = Movie.order('#{@ordered_by} asc')
+      # If not, show all rows of the DB  
+    else
+        @movies = Movie.all
+    end   
   end
     
   def new
