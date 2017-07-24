@@ -8,4 +8,5 @@ class Movie < ActiveRecord::Base
 			rating.rating
 		end
 	end
+
 end

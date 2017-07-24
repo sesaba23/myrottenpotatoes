@@ -84,4 +84,11 @@ class MoviesController < ApplicationController
     redirect_to movies_path
   end
 
+  def search_tmdb
+    #call model method to find the movie in the data base
+    @movies = Movie.find_in_tmdb(params[:search_terms])
+    #hasdwire to simulate failure
+    #flash[:warning] = "'Movie That Does Not Exists' was not found in TMDb"
+    #redirect_to movies_path
+  end
 end
