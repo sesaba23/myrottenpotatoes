@@ -52,7 +52,8 @@ class MoviesController < ApplicationController
       @movies = Movie.order("#{@ordered_by} asc")
       # If not, show all rows of the DB  
     else
-        @movies = Movie.all
+        #@movies = Movie.all
+        @movies = Movie.order("title asc")
     end   
   end
     
@@ -86,9 +87,9 @@ class MoviesController < ApplicationController
 
   def search_tmdb
     #call model method to find the movie in the data base
-    @movies = Movie.find_in_tmdb(params[:search_terms])
+    #@movies = Movie.find_in_tmdb(params[:search_terms])
     #hasdwire to simulate failure
-    #flash[:warning] = "'Movie That Does Not Exists' was not found in TMDb"
-    #redirect_to movies_path
+    flash[:warning] = "'Movie That Does Not Exists' was not found in TMDb"
+    redirect_to movies_path
   end
 end
