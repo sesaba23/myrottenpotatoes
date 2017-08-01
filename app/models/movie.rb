@@ -9,4 +9,7 @@ class Movie < ActiveRecord::Base
 		end
 	end
 
+	def self.find_in_tmdb param
+	end
+
 end
