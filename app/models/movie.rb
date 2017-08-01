@@ -12,4 +12,7 @@ class Movie < ActiveRecord::Base
 	def self.find_in_tmdb param
 	end
 
+	def name_with_rating
+		title + ' (' + rating + ')'
+	end
 end
